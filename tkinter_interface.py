@@ -1,13 +1,13 @@
 from tkinter import *
 from defs import *
 import time
-import sys
 
 matrix = csv_to_matrix('initial_population.csv')
 def do_something(matrix):
     matrix = iteration_nonwrapping(matrix)
 #    display_game(matrix, 'O', '.')
 
+    w.delete("all")
 
     for new_row in range(len(matrix)):
         for new_col in range(len(matrix[0])):
@@ -25,8 +25,8 @@ def continue_doing_something(matrix):
 
         do_something(matrix)
 
-        print('OK')
         time.sleep(time_between)
+
         root.update()
 
     print(frequency, time_for_iterations, total_iterations)
