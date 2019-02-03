@@ -1,7 +1,7 @@
 import os
 import csv
 
-def iteration(matrix):
+def iteration_nonwrapping(matrix):
     rowlen = len(matrix)
     collen = len(matrix[0])
 
@@ -30,6 +30,34 @@ def iteration(matrix):
                         matrix[row][col] = 0
     return matrix
 
+def iteration_wrapping(matrix):
+    rowlen = len(matrix)
+    collen = len(matrix[0])
+
+    new_matrix = []
+    for row in range(rowlen):
+        new_matrix.append([])
+        for num in matrix[row]:
+            new_matrix[row].append(num)
+
+    for row in range(rowlen):
+        for col in range(collen):
+            sum = 0
+            for rowcounter in range(-1, 2):
+                for colcounter in range(-1, 2):
+                    sum += new_matrix[(rowcounter+row)%(rowlen)][(colcounter+col)%(collen)]
+            if matrix[row][col] == 0:
+                if sum == 3:
+                    matrix[row][col] = 1
+            else:
+                if sum != 3:
+                    if sum != 4:
+                        matrix[row][col] = 0
+    return matrix
+
+
+    pass
+
 def csv_to_matrix(filename):
     counter = -1
     matrix = []
@@ -57,6 +85,9 @@ def display_game(matrix, live_symbol, dead_symbol):
 
 matrix = csv_to_matrix('initial_population.csv')
 
-for i in range(10000):
-     matrix = iteration(matrix)
+
+
+
+for i in range(100):
+     matrix = iteration_wrapping(matrix)
      display_game(matrix, 'O', '.')
