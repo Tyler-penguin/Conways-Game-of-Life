@@ -15,7 +15,8 @@ filename = my_dir + '/' + filename
 matrix = csv_to_matrix(filename)
 
 # defines the wrapping function
-def do_something_wrapping(matrix, scale):
+def do_something_wrapping(matrix, scale, color):
+
     # erases the canvas
     w.delete("all")
     rowlen = len(matrix)
@@ -27,7 +28,7 @@ def do_something_wrapping(matrix, scale):
         new_matrix.append([])
         for num in matrix[row]:
             new_matrix[row].append(num)
-
+    old_color = color
     color = my_entry4.get()
     # generates random colors
     if color == 'random':
@@ -37,6 +38,9 @@ def do_something_wrapping(matrix, scale):
         color_code = red + green + blue
         color = "%06x" % color_code
         color = ('#' + color)
+    # prevents errors based on invalid color codes
+    elif len(color) != 7:
+        color = old_color
 
     # iterates through the board
     for row in range(rowlen):
@@ -50,16 +54,32 @@ def do_something_wrapping(matrix, scale):
             if matrix[row][col] == 0:
                 if sum == 3:
                     matrix[row][col] = 1
-                    w.create_rectangle(col*scale, row*scale, col*scale+scale, row*scale+scale, fill=color)
+                    # prevents errors based on invalid color codes
+                    try:
+                        w.create_rectangle(col*scale, row*scale, col*scale+scale, row*scale+scale, fill=color)
+                    except:
+                        color = old_color
+                        w.create_rectangle(col*scale, row*scale, col*scale+scale, row*scale+scale, fill=color)
             # determines what to do if the cell was alive
             else:
                 if sum != 3:
                     if sum != 4:
                         matrix[row][col] = 0
                     else:
-                        w.create_rectangle(col*scale, row*scale, col*scale+scale, row*scale+scale, fill=color)
+                        # prevents errors based on invalid color codes
+                        try:
+                            w.create_rectangle(col*scale, row*scale, col*scale+scale, row*scale+scale, fill=color)
+                        except:
+                            color = old_color
+                            w.create_rectangle(col*scale, row*scale, col*scale+scale, row*scale+scale, fill=color)
                 else:
-                    w.create_rectangle(col*scale, row*scale, col*scale+scale, row*scale+scale, fill=color)
+                    # prevents errors based on invalid color codes
+                    try:
+                        w.create_rectangle(col*scale, row*scale, col*scale+scale, row*scale+scale, fill=color)
+                    except:
+                        color = old_color
+                        w.create_rectangle(col*scale, row*scale, col*scale+scale, row*scale+scale, fill=color)
+    return color
 
 # defines a function that automatically repeats the wrapping function
 def continue_doing_something_wrapping(matrix, scale):
@@ -67,9 +87,10 @@ def continue_doing_something_wrapping(matrix, scale):
     number_of_iterations = int(my_entry2.get())
     do_stop = str(my_entry3.get())
     iterations_remaining = number_of_iterations
+    color = '#ffffff'
     for iteration in range(number_of_iterations):
 
-        do_something_wrapping(matrix, scale)
+        color = do_something_wrapping(matrix, scale, color)
         # displays the number of iterations until the loop is completed
         iterations_remaining -=1
         my_text.delete(1.0, END)
@@ -87,7 +108,7 @@ def continue_doing_something_wrapping(matrix, scale):
     my_text.delete(1.0, END)
     my_text.insert(END, 'DONE')
 
-def do_something_nonwrapping(matrix, scale):
+def do_something_nonwrapping(matrix, scale, color):
     # erases the canvas
     w.delete("all")
     rowlen = len(matrix)
@@ -103,6 +124,7 @@ def do_something_nonwrapping(matrix, scale):
         padded_matrix[row+1].append(0)
     padded_matrix.append([0 for i in range(collen+2)])
 
+    old_color = color
     # sets the color of living squares
     color = my_entry4.get()
     if color == 'random':
@@ -112,6 +134,9 @@ def do_something_nonwrapping(matrix, scale):
         color_code = red + green + blue
         color = "%06x" % color_code
         color = ('#' + color)
+    # prevents errors based on invalid color codes
+    elif len(color) != 7:
+        color = old_color
 
     # iterates through the matrix to determine if the cell willl be alive or not
     for row in range(rowlen):
@@ -126,26 +151,42 @@ def do_something_nonwrapping(matrix, scale):
             if matrix[row][col] == 0:
                 if sum == 3:
                     matrix[row][col] = 1
-                    w.create_rectangle(col*scale, row*scale, col*scale+scale, row*scale+scale, fill=color)
+                    # prevents errors based on invalid color codes
+                    try:
+                        w.create_rectangle(col*scale, row*scale, col*scale+scale, row*scale+scale, fill=color)
+                    except:
+                        color = old_color
+                        w.create_rectangle(col*scale, row*scale, col*scale+scale, row*scale+scale, fill=color)
             # determines what to do if the cell was alive
             else:
                 if sum != 3:
                     if sum != 4:
                         matrix[row][col] = 0
                     else:
-                        w.create_rectangle(col*scale, row*scale, col*scale+scale, row*scale+scale, fill=color)
+                        # prevents errors based on invalid color codes
+                        try:
+                            w.create_rectangle(col*scale, row*scale, col*scale+scale, row*scale+scale, fill=color)
+                        except:
+                            color = old_color
+                            w.create_rectangle(col*scale, row*scale, col*scale+scale, row*scale+scale, fill=color)
                 else:
-                    w.create_rectangle(col*scale, row*scale, col*scale+scale, row*scale+scale, fill=color)
+                    # prevents errors based on invalid color codes
+                    try:
+                        w.create_rectangle(col*scale, row*scale, col*scale+scale, row*scale+scale, fill=color)
+                    except:
+                        color = old_color
+                        w.create_rectangle(col*scale, row*scale, col*scale+scale, row*scale+scale, fill=color)
+    return color
 
 # defines a function that automatically repeats the nonwrapping function
 def continue_doing_something_nonwrapping(matrix, scale):
     time_between = float(my_entry.get())
     number_of_iterations = int(my_entry2.get())
     iterations_remaining = number_of_iterations
-
+    color = '#ffffff'
     for iteration in range(number_of_iterations):
 
-        do_something_nonwrapping(matrix, scale)
+        color = do_something_nonwrapping(matrix, scale, color)
         # displays the number of iterations until the loop is completed
         iterations_remaining -=1
         my_text.delete(1.0, END)
@@ -175,9 +216,9 @@ bottom.pack(side=BOTTOM, fill=BOTH, expand=True)
 
 # creates a button that iterates once
 if do_wrap == True:
-    my_button = Button(root, bg='#808080', width=20, command= lambda: do_something_wrapping(matrix, scale), height=1, text='ITERATE ONCE')
+    my_button = Button(root, bg='#808080', width=20, command= lambda: do_something_wrapping(matrix, scale, '#ffffff'), height=1, text='ITERATE ONCE')
 else:
-    my_button = Button(root, bg='#808080', width=20, command= lambda: do_something_nonwrapping(matrix, scale), height=1, text='ITERATE ONCE')
+    my_button = Button(root, bg='#808080', width=20, command= lambda: do_something_nonwrapping(matrix, scale, '#ffffff'), height=1, text='ITERATE ONCE')
 
 my_label = Label(root, text='TIME BETWEEN UPDATES')
 my_entry = Entry(root, width=10)
